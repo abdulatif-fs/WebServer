@@ -1,9 +1,18 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import os
+import http.server
+import socketserver
 
+
+Path = 'C:/Users/ASUS/OneDrive/Dokumen/Abdulatif/kuliah/sem9/progjar/WebServer'
 class Server(BaseHTTPRequestHandler):
     def do_GET(self):
+         
         print('path = ', self.path)
+        os.path.join(Path, self.path)
+        dir_list = os.listdir(self.path)
+        print('dirlist = ', dir_list)
+        print()
         if self.path == '/':
             self.path = '/index.html'
 
