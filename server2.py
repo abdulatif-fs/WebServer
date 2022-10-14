@@ -1,4 +1,5 @@
 import socket
+import os
 # import socketserver
 # import http.server
 
@@ -25,7 +26,7 @@ while True:
     headers = request.split('\n')
     filename = headers[0].split()[1]
     # print('request nya nihh : ', filename)
-
+    indexname = filename[0].split('/')[1]
     hostname = headers[1].split(':')[1]
     print(hostname, ' Terhubung ......')
 
@@ -34,36 +35,52 @@ while True:
         Directory = 'C:/Users/ASUS/OneDrive/Dokumen/Abdulatif/kuliah/sem9/progjar/WebServer/folder1/'
     elif hostname == ' fajar.co.id':
         Directory = 'C:/Users/ASUS/OneDrive/Dokumen/Abdulatif/kuliah/sem9/progjar/WebServer/folder2/'
-
-     # Get the content of htdocs/index.html
+    else:
+        Directory = 'C:/Users/ASUS/OneDrive/Dokumen/Abdulatif/kuliah/sem9/progjar/WebServer/'
+    
     if filename == '/':
-        filename = '/index.html'
+            filename = '/index.html'
 
-        fin = open(Directory + filename)
-        content = fin.read()
-        fin.close()
+            fin = open(Directory + filename)
+            content = fin.read()
+            fin.close()
 
-        # Send HTTP response
-        response = 'HTTP/1.0 200 OK\n\n' + content
-        client_connection.sendall(response.encode())
-        client_connection.close()
-    elif filename == '/index.html':
-        fin = open(Directory + filename)
-        content = fin.read()
-        fin.close()
+            # Send HTTP response
+            response = 'HTTP/1.0 200 OK\n\n' + content
+            client_connection.sendall(response.encode())
+            client_connection.close()
 
-        # Send HTTP response
-        response = 'HTTP/1.0 200 OK\n\n' + content
-        client_connection.sendall(response.encode())
-        client_connection.close()
-    elif filename == '/folder1':
-        fin = open(Directory +'file1.html')
-        content = fin.read()
-        fin.close()
+    elif '.' in filename:        
+     # Get the content of htdocs/index.html        
+        if 'html' in filename:
+            try:
+                fin = open(Directory + filename)
+                content = fin.read()
+                fin.close()
 
-        response = 'HTTP/1.0 200 OK\n\n' + content
-        client_connection.sendall(response.encode())
-        client_connection.close()
+                # Send HTTP response
+                response = 'HTTP/1.0 200 OK\n\n' + content
+                client_connection.sendall(response.encode())
+                client_connection.close()
+            except:
+                response = 'HTTP/1.0 404 Not Found\n\n'
+                client_connection.sendall(response.encode())
+                client_connection.close()
+                
+        elif filename == '/folder1':
+            fin = open(Directory +'file1.html')
+            content = fin.read()
+            fin.close()
+
+            response = 'HTTP/1.0 200 OK\n\n' + content
+            client_connection.sendall(response.encode())
+            client_connection.close()
+
+        elif '.pdf' in filename:
+            response = 'HTTP/1.0 200 OK\n\n'
+            client_connection.sendall(response.encode())
+            client_connection.close()
+
     else:
         response = 'HTTP/1.0 404 Not Found\n\n'
         client_connection.sendall(response.encode())
