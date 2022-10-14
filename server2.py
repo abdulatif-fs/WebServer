@@ -62,10 +62,7 @@ while True:
             client_connection.close()
             print(os.path)
 
-    elif '.' in filename:        
-     # Get the content of htdocs/index.html        
-        if 'html' in filename:
-            if indexname not in os.listdir(newdir):
+    elif indexname not in os.listdir(newdir):
                 fin = open(Directory + '/404.html')
                 content = fin.read()
                 fin.close()
@@ -74,31 +71,28 @@ while True:
                 client_connection.sendall(response.encode())
                 client_connection.close()
 
-            else:
-                fin = open(Directory + filename)
-                content = fin.read()
-                fin.close()
-                # Send HTTP response
-                response = 'HTTP/1.0 200 OK\n\n' + content
-                client_connection.sendall(response.encode())
-                client_connection.close()
-
-        elif filename == '/folder1':
-            fin = open(Directory +'file1.html')
+    elif '.' in filename:        
+     # Get the content of htdocs/index.html        
+        if 'html' in filename:
+            fin = open(Directory + filename)
             content = fin.read()
             fin.close()
-
+            # Send HTTP response
             response = 'HTTP/1.0 200 OK\n\n' + content
             client_connection.sendall(response.encode())
             client_connection.close()
 
-        elif '.pdf' in filename:
+        else:
             response = 'HTTP/1.0 200 OK\n\n'
             client_connection.sendall(response.encode())
             client_connection.close()
 
     else:
-        response = 'HTTP/1.0 404 Not Found\n\n'
+        fin = open(Directory +'file1.html')
+        content = fin.read()
+        fin.close()
+
+        response = 'HTTP/1.0 200 OK\n\n' + content
         client_connection.sendall(response.encode())
         client_connection.close()
 
