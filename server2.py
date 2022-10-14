@@ -1,3 +1,4 @@
+from dataclasses import replace
 import socket
 import os
 # import socketserver
@@ -5,7 +6,13 @@ import os
 
 host = '127.0.0.1'
 port = 8080
-Path = 'C:/Users/ASUS/OneDrive/Dokumen/Abdulatif/kuliah/sem9/progjar/WebServer'
+path = 'C:/Users/ASUS/OneDrive/Dokumen/Abdulatif/kuliah/sem9/progjar/WebServer/'
+try:
+    # newdir = os.path.dirname(path)
+    print('direktori diganti')
+    # print(os.listdir(newdir))
+except:
+    print("ngga terganti")
 # Create socket
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -25,18 +32,22 @@ while True:
     #get filename
     headers = request.split('\n')
     filename = headers[0].split()[1]
-    # print('request nya nihh : ', filename)
-    indexname = filename[0].split('/')[1]
+    # print('request nya nihh:', filename)
+    indexname = filename.replace('/','')
+    # print('index name:',indexname,'==')
     hostname = headers[1].split(':')[1]
     print(hostname, ' Terhubung ......')
 
     #direktori dan konfigurasi
     if hostname == ' abdulatif.com':
         Directory = 'C:/Users/ASUS/OneDrive/Dokumen/Abdulatif/kuliah/sem9/progjar/WebServer/folder1/'
+        newdir = os.path.dirname(Directory)
     elif hostname == ' fajar.co.id':
         Directory = 'C:/Users/ASUS/OneDrive/Dokumen/Abdulatif/kuliah/sem9/progjar/WebServer/folder2/'
+        newdir = os.path.dirname(Directory)
     else:
         Directory = 'C:/Users/ASUS/OneDrive/Dokumen/Abdulatif/kuliah/sem9/progjar/WebServer/'
+        newdir = os.path.dirname(Directory)
     
     if filename == '/':
             filename = '/index.html'
@@ -49,24 +60,29 @@ while True:
             response = 'HTTP/1.0 200 OK\n\n' + content
             client_connection.sendall(response.encode())
             client_connection.close()
+            print(os.path)
 
     elif '.' in filename:        
      # Get the content of htdocs/index.html        
         if 'html' in filename:
-            try:
-                fin = open(Directory + filename)
+            if indexname not in os.listdir(newdir):
+                fin = open(Directory + '/404.html')
                 content = fin.read()
                 fin.close()
 
+                response = 'HTTP/1.0 404 Not Found\n\n' + content
+                client_connection.sendall(response.encode())
+                client_connection.close()
+
+            else:
+                fin = open(Directory + filename)
+                content = fin.read()
+                fin.close()
                 # Send HTTP response
                 response = 'HTTP/1.0 200 OK\n\n' + content
                 client_connection.sendall(response.encode())
                 client_connection.close()
-            except:
-                response = 'HTTP/1.0 404 Not Found\n\n'
-                client_connection.sendall(response.encode())
-                client_connection.close()
-                
+
         elif filename == '/folder1':
             fin = open(Directory +'file1.html')
             content = fin.read()

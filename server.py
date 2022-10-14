@@ -9,7 +9,7 @@ class Server(BaseHTTPRequestHandler):
     def do_GET(self):
          
         print('path = ', self.path)
-        os.path.join(Path, self.path)
+        print(os.path.join(Path, self.path))
         dir_list = os.listdir(self.path)
         print('dirlist = ', dir_list)
         print()
