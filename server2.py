@@ -82,6 +82,13 @@ while True:
             client_connection.sendall(response.encode())
             client_connection.close()
 
+        # elif 'pdf' in filename:
+        #     fin = open(Directory + filename)
+        #     fin.write(client_connection)
+        #     response = 'HTTP/1.0 200 OK\n\n'
+        #     client_connection.sendall(response.encode())
+        #     client_connection.close()
+
         else:
             response = 'HTTP/1.0 200 OK\n\n'
             client_connection.sendall(response.encode())
