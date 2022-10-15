@@ -90,9 +90,12 @@ while True:
         #     client_connection.close()
 
         else:
-            response = 'HTTP/1.0 200 OK\n\n'
-            client_connection.sendall(response.encode())
-            client_connection.close()
+            with open(Directory+filename, 'rb') as file_to_send:
+                for data in file_to_send:
+                    client_connection.sendall(data)
+                    response = 'HTTP/1.0 200 OK\n\n'
+                    client_connection.sendall(response.encode())
+                    client_connection.close()
 
     else:
         fin = open(Directory +'file1.html')
