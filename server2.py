@@ -1,6 +1,7 @@
 from dataclasses import replace
 import socket
 import os
+import konfig
 # import socketserver
 # import http.server
 
@@ -41,14 +42,14 @@ while True:
     print('connection: ', koneksi)
 
     #direktori dan konfigurasi
-    if hostname == ' abdulatif.com':
-        Directory = 'C:/Users/ASUS/OneDrive/Dokumen/Abdulatif/kuliah/sem9/progjar/WebServer/folder1/'
+    if hostname == konfig.hostname1:
+        Directory = konfig.Directory1
         newdir = os.path.dirname(Directory)
-    elif hostname == ' fajar.co.id':
-        Directory = 'C:/Users/ASUS/OneDrive/Dokumen/Abdulatif/kuliah/sem9/progjar/WebServer/folder2/'
+    elif hostname == konfig.hostname2:
+        Directory = konfig.Directory2
         newdir = os.path.dirname(Directory)
     else:
-        Directory = 'C:/Users/ASUS/OneDrive/Dokumen/Abdulatif/kuliah/sem9/progjar/WebServer/'
+        Directory = konfig.Directory
         newdir = os.path.dirname(Directory)
     
     if filename == '/':
