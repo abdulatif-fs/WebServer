@@ -37,6 +37,8 @@ while True:
     # print('index name:',indexname,'==')
     hostname = headers[1].split(':')[1]
     print(hostname, ' Terhubung ......')
+    koneksi = headers[2].split()[1]
+    print('connection: ', koneksi)
 
     #direktori dan konfigurasi
     if hostname == ' abdulatif.com':
@@ -60,7 +62,7 @@ while True:
             response = 'HTTP/1.0 200 OK\n\n' + content
             client_connection.sendall(response.encode())
             client_connection.close()
-            print(os.path)
+            # print(os.path)
 
     elif indexname not in os.listdir(newdir):
                 fin = open(Directory + '/404.html')
@@ -107,6 +109,8 @@ while True:
         client_connection.close()
 
     print('=================')
+    if koneksi is 'keep-alive':
+        break
 
 # Close socket
 server_socket.close()
