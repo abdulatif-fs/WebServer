@@ -59,7 +59,7 @@ while True:
             fin.close()
 
             # Send HTTP response
-            response = 'HTTP/1.0 200 OK\n\n' + content
+            response = 'HTTP/1.0 200 OK\n\n'+ content
             client_connection.sendall(response.encode())
             client_connection.close()
             # print(os.path)
@@ -109,7 +109,7 @@ while True:
         client_connection.close()
 
     print('=================')
-    if koneksi is 'keep-alive':
+    if koneksi != 'keep-alive':
         break
 
 # Close socket
