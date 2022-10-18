@@ -11,6 +11,7 @@ import threading
 #         threading.Thread.__init__(self)
 def thread(client_connection, client_address):
     # csocket = client_connection
+    print('========================')
     print ("New connection added: ", client_address)
 
     while True:
@@ -47,13 +48,40 @@ def thread(client_connection, client_address):
             response = 'HTTP/1.0 200 OK\n\n'+ content
             client_connection.sendall(response.encode())
             client_connection.close()
+        
+        elif indexname not in os.listdir(newdir):
+                fin = open(Directory + '/404.html')
+                content = fin.read()
+                fin.close()
+
+                response = 'HTTP/1.0 404 Not Found\n\n' + content
+                client_connection.sendall(response.encode())
+                client_connection.close()
+
+        elif '.' in filename:        
+     # Get the content of htdocs/index.html        
+            if 'html' in filename:
+                fin = open(Directory + filename)
+                content = fin.read()
+                fin.close()
+                # Send HTTP response
+                response = 'HTTP/1.0 200 OK\n\n' + content
+                client_connection.sendall(response.encode())
+                client_connection.close()
+            else:
+                with open(Directory+filename, 'rb') as file_to_send:
+                    for data in file_to_send:
+                        client_connection.sendall(data)
+                        response = 'HTTP/1.0 200 OK\n\n'
+                        client_connection.sendall(response.encode())
+                        client_connection.close()
+                
         else:
-            fin = open(Directory + '/404.html')
+            fin = open(Directory +'file1.html')
             content = fin.read()
             fin.close()
 
-            # Send HTTP response
-            response = 'HTTP/1.0 404 Not Found\n\n'+ content
+            response = 'HTTP/1.0 200 OK\n\n' + content
             client_connection.sendall(response.encode())
             client_connection.close()
         # print_lock.release()
