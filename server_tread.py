@@ -1,19 +1,45 @@
 import socket
 import os
 import konfig
+from _thread import *
+import threading
+
 # import socketserver
 # import http.server
 
 host = '127.0.0.1'
 port = 8080
 path = 'C:/Users/ASUS/OneDrive/Dokumen/Abdulatif/kuliah/sem9/progjar/WebServer/'
-try:
+# try:
     # newdir = os.path.dirname(path)
-    print('direktori diganti')
+    # print('direktori diganti')
     # print(os.listdir(newdir))
-except:
-    print("ngga terganti")
+# except:
+    # print("ngga terganti")
 # Create socket
+print_lock = threading.Lock
+
+def threaded(client_connection):
+    client_connection, client_address = server_socket.accept()
+    while True:
+        data = client_connection.recv(1024).decode
+        if not data:
+            response='HTTP/1.0 404 Not Found\n\n'
+            client_connection.send(response.encode)
+            # lock released on exit
+            print_lock.release()
+            break
+ 
+        # reverse the given string from client
+        else:
+            response = 'HTTP/1.0 200 OK\n\n'
+ 
+        # send back reversed string to client
+            client_connection.sendall(response.encode)
+ 
+    # connection closed
+    client_connection.close()
+
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 server_socket.bind((host, port))
@@ -109,6 +135,7 @@ while True:
         client_connection.close()
 
     print('=================')
+    start_new_thread(threaded, (client_connection,))
     if koneksi != 'keep-alive':
         break
 
