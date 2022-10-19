@@ -1,10 +1,10 @@
 import socket
 import os
-from urllib import request
 import konfig
 from _thread import *
 import threading
 
+CRLF= "\r\n"
 # print_lock = threading.Lock()
 # class ClientThread(threading.Thread):
 #     def __init__(self,client_address, client_connection):
@@ -45,7 +45,7 @@ def thread(client_connection, client_address):
             fin.close()
 
             # Send HTTP response
-            response = 'HTTP/1.0 200 OK\n\n'+ content
+            response = 'HTTP/1.0 200 OK'+CRLF+'Content-Type: text/html' + CRLF*2 + content
             client_connection.sendall(response.encode())
             client_connection.close()
         
@@ -54,7 +54,7 @@ def thread(client_connection, client_address):
                 content = fin.read()
                 fin.close()
 
-                response = 'HTTP/1.0 404 Not Found\n\n' + content
+                response = 'HTTP/1.0 404 Not Found'+CRLF
                 client_connection.sendall(response.encode())
                 client_connection.close()
 
@@ -65,17 +65,47 @@ def thread(client_connection, client_address):
                 content = fin.read()
                 fin.close()
                 # Send HTTP response
-                response = 'HTTP/1.0 200 OK\n\n' + content
+                tipe = 'text/html'
+                response = 'HTTP/1.0 200 OK'+CRLF+'Content-Type: '+tipe+CRLF*2+ content
                 client_connection.sendall(response.encode())
                 client_connection.close()
+
+            elif 'pdf' in filename:
+                with open(Directory+filename, 'rb') as file_to_send:
+                        tipe = 'application/pdf'
+                        response = 'HTTP/1.0 200 OK'+CRLF+'Content-Type: '+tipe+CRLF*2
+                        client_connection.sendall(response.encode())
+                        client_connection.sendfile(file_to_send)
+                        client_connection.close()
+            
+            elif 'png' in filename:
+                with open(Directory+filename, 'rb') as file_to_send:
+                        # tipe = 'video/mp2t'
+                        tipe = 'image/pn'
+                        response = 'HTTP/1.0 200 OK'+CRLF+'Content-Type: '+tipe+CRLF*2
+                        client_connection.sendall(response.encode())
+                        client_connection.sendfile(file_to_send)
+                        client_connection.close()
+            
+            elif 'rar' in filename:
+                with open(Directory+filename, 'rb') as file_to_send:
+                        # tipe = 'video/mp2t'
+                        tipe = 'application/vnd.ra'
+                        response = 'HTTP/1.0 200 OK'+CRLF+'Content-Type: '+tipe+CRLF*2
+                        client_connection.sendall(response.encode())
+                        client_connection.sendfile(file_to_send)
+                        client_connection.close()
+
             else:
                 with open(Directory+filename, 'rb') as file_to_send:
-                    for data in file_to_send:
-                        client_connection.sendall(data)
-                        response = 'HTTP/1.0 200 OK\n\n'
+                    # for data in file_to_send:
+                        # client_connection.sendall(data)
+                        # tipe = 'image/pn'
+                        response = 'HTTP/1.0 200 OK'+CRLF
                         client_connection.sendall(response.encode())
+                        client_connection.sendfile(file_to_send)
                         client_connection.close()
-                
+    
         else:
             fin = open(Directory +'file1.html')
             content = fin.read()

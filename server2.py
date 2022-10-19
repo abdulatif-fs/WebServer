@@ -1,4 +1,3 @@
-from email import header
 import socket
 import os
 import konfig
@@ -8,6 +7,7 @@ import konfig
 host = '127.0.0.1'
 port = 8080
 path = 'C:/Users/ASUS/OneDrive/Dokumen/Abdulatif/kuliah/sem9/progjar/WebServer/'
+CRLF = '\r\n'
 try:
     # newdir = os.path.dirname(path)
     print('direktori diganti')
@@ -60,8 +60,11 @@ while True:
             fin.close()
 
             # Send HTTP response
-            response = 'HTTP/1.0 200 OK\n\n'+ content
+            response = 'HTTP/1.0 200 OK'+CRLF+'Content-Type: text/html'+CRLF*2+ content
             client_connection.sendall(response.encode())
+            # client_connection.send('HTTP/1.0 200 OK'+CRLF)
+            # client_connection.send('Content-Type: text/html'+CRLF*2)
+            # client_connection.send(content)
             client_connection.close()
             # print(os.path)
 
@@ -82,24 +85,44 @@ while True:
             fin.close()
             # Send HTTP response
             tipe = 'text/html'
-            response = 'HTTP/1.0 200 OK\n\n' + content
+            response = 'HTTP/1.0 200 OK'+CRLF+'Content-Type: '+tipe+CRLF*2+ content
             client_connection.sendall(response.encode())
             client_connection.close()
 
-        # elif 'pdf' in filename:
-        #     fin = open(Directory + filename)
-        #     fin.write(client_connection)
-        #     response = 'HTTP/1.0 200 OK\n\n'
-        #     client_connection.sendall(response.encode())
-        #     client_connection.close()
+        elif 'pdf' in filename:
+            with open(Directory+filename, 'rb') as file_to_send:
+                    tipe = 'application/pdf'
+                    response = 'HTTP/1.0 200 OK'+CRLF+'Content-Type: '+tipe+CRLF*2
+                    client_connection.sendall(response.encode())
+                    client_connection.sendfile(file_to_send)
+                    client_connection.close()
+        
+        elif 'png' in filename:
+            with open(Directory+filename, 'rb') as file_to_send:
+                    # tipe = 'video/mp2t'
+                    tipe = 'image/pn'
+                    response = 'HTTP/1.0 200 OK'+CRLF+'Content-Type: '+tipe+CRLF*2
+                    client_connection.sendall(response.encode())
+                    client_connection.sendfile(file_to_send)
+                    client_connection.close()
+        
+        elif 'rar' in filename:
+            with open(Directory+filename, 'rb') as file_to_send:
+                    # tipe = 'video/mp2t'
+                    tipe = 'application/vnd.ra'
+                    response = 'HTTP/1.0 200 OK'+CRLF+'Content-Type: '+tipe+CRLF*2
+                    client_connection.sendall(response.encode())
+                    client_connection.sendfile(file_to_send)
+                    client_connection.close()
 
         else:
             with open(Directory+filename, 'rb') as file_to_send:
-                for data in file_to_send:
-                    client_connection.sendall(data)
-                    tipe = 'application/pdf'
-                    response = 'HTTP/1.0 200 OK\n\n'
-                    client_connection.sendall(response.encode()+tipe)
+                # for data in file_to_send:
+                    # client_connection.sendall(data)
+                    # tipe = 'image/pn'
+                    response = 'HTTP/1.0 200 OK'+CRLF
+                    client_connection.sendall(response.encode())
+                    client_connection.sendfile(file_to_send)
                     client_connection.close()
 
     else:
