@@ -1,3 +1,4 @@
+from email import header
 import socket
 import os
 import konfig
@@ -80,6 +81,7 @@ while True:
             content = fin.read()
             fin.close()
             # Send HTTP response
+            tipe = 'text/html'
             response = 'HTTP/1.0 200 OK\n\n' + content
             client_connection.sendall(response.encode())
             client_connection.close()
@@ -95,8 +97,9 @@ while True:
             with open(Directory+filename, 'rb') as file_to_send:
                 for data in file_to_send:
                     client_connection.sendall(data)
+                    tipe = 'application/pdf'
                     response = 'HTTP/1.0 200 OK\n\n'
-                    client_connection.sendall(response.encode())
+                    client_connection.sendall(response.encode()+tipe)
                     client_connection.close()
 
     else:

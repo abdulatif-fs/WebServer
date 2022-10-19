@@ -20,7 +20,7 @@ class Server(BaseHTTPRequestHandler):
 
             file_to_open = open(newdir+'/'+self.path[1:]).read()
             self.send_response(200)
-
+            self.send_header('Content-type', 'text/html')
             self.end_headers()
             self.wfile.write(bytes(file_to_open, 'utf-8'))
 
@@ -38,9 +38,24 @@ class Server(BaseHTTPRequestHandler):
             if "html" in self.path:
                 file_to_open = open(newdir+self.path).read()
                 self.send_response(200)
-
+                self.send_header('Content-type', 'text/html')
                 self.end_headers()
                 self.wfile.write(bytes(file_to_open, 'utf-8'))
+            elif 'pdf' in self.path:
+                with open(newdir+self.path, 'rb') as f:
+                    data = f.read()
+                    self.send_response(200)
+                    self.send_header('Content-type', 'application/pdf')
+                    self.end_headers()
+                    self.wfile.write(data)
+            elif 'png' in self.path:
+                with open(newdir+self.path, 'rb') as f:
+                    data = f.read()
+                    self.send_response(200)
+                    self.send_header('Contenr-type', 'image/png')
+                    self.flush_headers()
+                    self.end_headers()
+                    self.wfile.write(data)
             else:
                 with open(newdir+self.path, 'rb') as f:
                     data = f.read()
