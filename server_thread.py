@@ -90,7 +90,7 @@ def thread(client_connection, client_address):
             elif 'rar' in filename:
                 with open(Directory+filename, 'rb') as file_to_send:
                         # tipe = 'video/mp2t'
-                        tipe = 'application/vnd.ra'
+                        tipe = 'application/vnd.rar'
                         response = 'HTTP/1.0 200 OK'+CRLF+'Content-Type: '+tipe+CRLF*2
                         client_connection.sendall(response.encode())
                         client_connection.sendfile(file_to_send)
@@ -101,7 +101,8 @@ def thread(client_connection, client_address):
                     # for data in file_to_send:
                         # client_connection.sendall(data)
                         # tipe = 'image/pn'
-                        response = 'HTTP/1.0 200 OK'+CRLF
+                        tipe = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                        response = 'HTTP/1.0 200 OK'+CRLF+tipe+CRLF*2
                         client_connection.sendall(response.encode())
                         client_connection.sendfile(file_to_send)
                         client_connection.close()
